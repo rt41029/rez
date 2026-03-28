@@ -1,4 +1,4 @@
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL_CACHE = `rezerv-shell-${VERSION}`;
 const RUNTIME_CACHE = `rezerv-runtime-${VERSION}`;
 const OFFLINE_URL = "./offline.html";
@@ -7,6 +7,7 @@ const APP_SHELL = [
   "./index.html",
   "./manifest.webmanifest",
   "./offline.html",
+  "./evod-template.pdf",
   "./qr-photo.jpg",
   "./icon-192.png",
   "./icon-512.png",
