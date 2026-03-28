@@ -2,11 +2,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="PWA-версія застосунку Резерв+ з офлайн-запуском, встановленням на головний екран та кешуванням оболонки застосунку.">
+  <meta name="format-detection" content="telephone=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Резерв+">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#e0dfcd">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <title>Резерв+</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
@@ -15,7 +20,7 @@
       --white: #ffffff; --text: #1a1a1a; --muted: #888880;
       --ticker: #644c23; --orange: #e87800; --nav-h: 70px;
     }
-    html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; font-weight: 300; color: var(--text); }
+    html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; font-weight: 300; color: var(--text); color-scheme: light; }
     #lock { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .3s; }
     #lock.out { opacity: 0; pointer-events: none; }
     #lock h2 { font-size: 24px; font-weight: 300; margin-bottom: 32px; letter-spacing: -.2px; }
@@ -35,7 +40,10 @@
     .screen::-webkit-scrollbar { display: none; }
     .screen.active { opacity: 1; pointer-events: all; }
     #s-rezerv { display: flex !important; flex-direction: column; overflow: hidden !important; padding: 0 16px !important; }
-    .topbar { flex-shrink: 0; display: flex; justify-content: flex-end; padding: 12px 0 8px; }
+    .topbar { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 0 8px; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .pwa-pill { border: none; border-radius: 999px; background: rgba(26,26,26,.08); color: var(--text); padding: 10px 14px; font-size: 13px; font-weight: 400; cursor: pointer; white-space: nowrap; }
+    .pwa-pill[hidden] { display: none !important; }
     .notif { display: flex; align-items: center; gap: 7px; background: var(--white); border: none; border-radius: 30px; padding: 9px 16px; font-size: 14px; font-weight: 300; cursor: pointer; color: var(--text); box-shadow: 0 1px 6px rgba(0,0,0,.1); }
     .notif-bell { width: 18px; height: 18px; flex-shrink: 0; }
     .card-wrap { flex: 1; display: flex; align-items: center; perspective: 1100px; cursor: pointer; margin: 0 4px; padding-top: 1vh; padding-bottom: 1vh; }
@@ -43,7 +51,7 @@
     .card-inner.flip { transform: rotateY(180deg); }
     .face { border-radius: 20px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
     .face-front { background: var(--card-bg); border: 1.5px solid var(--card-border); }
-    .face-back { position: absolute; inset: 0; transform: rotateY(180deg); background: var(--white); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 20px 18px 18px; gap: 12px; overflow: hidden; }
+    .face-back { position: absolute; inset: 0; transform: rotateY(180deg); background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 72px 22px 24px; gap: 2px; overflow: hidden; }
     .f-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 14px 4px; }
     .f-title { font-size: 18px; font-weight: 500; letter-spacing: -.2px; }
     .trident-img { width: 36px; height: 40px; object-fit: contain; flex-shrink: 0; }
@@ -59,11 +67,15 @@
     .f-person { padding: 16px 14px 18px; position: relative; background: var(--card-bg); display: flex; flex-direction: column; justify-content: center; }
     .f-plbl { font-size: 12px; color: rgb(80,79,67); margin-bottom: 8px; font-weight: 300; }
     .f-name { font-size: 19px; font-weight: 500; line-height: 1.1; letter-spacing: 0.1px; }
-    .btn-plus { position: absolute; right: 14px; top: calc(50% - 10px); transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--orange); color: #000; font-size: 32px; font-weight: 400; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; box-shadow: 0 3px 12px rgba(232,120,0,.45); }
-    .btn-plus:active { transform: translateY(-50%) scale(.92); }
-    .qr-lbl { font-size: 14px; font-weight: 300; width: 100%; color: var(--text); }
-    #qr-box { display: flex; width: 100%; }
+    .btn-plus { position: absolute; right: 14px; bottom: 18px; width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--orange); color: #000; cursor: pointer; display: grid; place-items: center; padding: 0; box-shadow: 0 3px 12px rgba(232,120,0,.45); transition: transform .09s; }
+    .btn-plus-glyph { display: block; font-size: 33px; font-weight: 400; line-height: .8; transform: translateY(-1px); }
+    .btn-plus:active { transform: scale(.92); }
+    .qr-lbl { width: 100%; color: var(--text); text-align: center; font-size: 14px; line-height: 1.35; font-weight: 600; }
+    #qr-box { display: flex; width: 100%; flex: 1; min-height: 220px; align-items: center; justify-content: center; }
     #qr-box canvas, #qr-box img { width: 100% !important; height: auto !important; display: block; }
+    .qr-photo-wrap { width: 100%; display: grid; justify-items: center; }
+    .qr-photo-frame { width: min(100%, 286px); overflow: hidden; border-radius: 0; background: #fff; border: none; box-shadow: none; }
+    .qr-photo { aspect-ratio: 897 / 923; object-fit: cover; }
     .bs-bg { position: fixed; inset: 0; z-index: 700; background: rgba(0,0,0,.45); display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity .2s; }
     .bs-bg.open { opacity: 1; pointer-events: all; }
     .bs { width: 100%; background: var(--white); border-radius: 24px 24px 0 0; padding-bottom: max(24px,env(safe-area-inset-bottom)); transform: translateY(100%); transition: transform .28s cubic-bezier(.4,0,.2,1); }
@@ -103,6 +115,15 @@
     .nb.active { color: var(--text); font-weight: 400; }
     .nb.active .nb-svg { opacity: 1; }
     .nb-icon-wrap { position: relative; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .install-toast { position: fixed; left: 16px; right: 16px; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px); z-index: 850; padding: 16px; border-radius: 24px; background: rgba(26,26,26,.96); color: #fff; box-shadow: 0 14px 34px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transform: translateY(18px); transition: opacity .24s ease, transform .24s ease; }
+    .install-toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .install-toast[hidden] { display: none !important; }
+    .install-title { font-size: 17px; font-weight: 500; margin-bottom: 6px; }
+    .install-copy { font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.82); }
+    .install-actions { display: flex; gap: 10px; margin-top: 14px; }
+    .ghost-btn, .install-btn { flex: 1; border: none; border-radius: 999px; padding: 13px 16px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .ghost-btn { background: rgba(255,255,255,.12); color: #fff; }
+    .install-btn { background: var(--orange); color: #fff; }
   </style>
 </head>
 <body>
@@ -127,10 +148,13 @@
 
     <div class="screen active" id="s-rezerv">
       <div class="topbar">
-        <button class="notif">
-          Сповіщення
-          <svg class="notif-bell" viewBox="0 0 24 24" fill="#000"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-        </button>
+        <div class="topbar-actions">
+          <button class="pwa-pill" id="installTopBtn" hidden>Встановити</button>
+          <button class="notif">
+            Сповіщення
+            <svg class="notif-bell" viewBox="0 0 24 24" fill="#000"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          </button>
+        </div>
       </div>
       <div class="card-wrap" id="cw">
         <div class="card-inner" id="ci">
@@ -148,7 +172,7 @@
             <div class="f-person">
               <div class="f-plbl">Призовник</div>
               <div class="f-name">ПИВОВАР<br>Юрій<br>Федорович</div>
-              <button class="btn-plus" id="pbtn">+</button>
+              <button class="btn-plus" id="pbtn" aria-label="Відкрити дії"><span class="btn-plus-glyph">+</span></button>
             </div>
           </div>
           <div class="face face-back">
@@ -232,8 +256,20 @@
   </div>
 </div>
 
+<div class="install-toast" id="installToast" hidden>
+  <div class="install-title">Встановити застосунок</div>
+  <div class="install-copy" id="installCopy">Додайте Резерв+ на головний екран, щоб відкривати його як окремий застосунок і запускати офлайн.</div>
+  <div class="install-actions">
+    <button class="ghost-btn" id="installDismissBtn">Пізніше</button>
+    <button class="install-btn" id="installActionBtn">Встановити</button>
+  </div>
+</div>
+
 <script>
 let pin = "";
+const QR_IMAGE_SRC = "./qr-photo.jpg";
+let deferredInstallPrompt = null;
+let installToastTimer = null;
 document.querySelectorAll(".pk[data-v]").forEach(b => b.addEventListener("click", () => {
   if (pin.length >= 4) return;
   pin += b.dataset.v;
@@ -281,20 +317,68 @@ function makeTicker() {
 }
 makeTicker();
 setInterval(makeTicker, 60000);
-(function(){
-  const s = document.createElement("script");
-  s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
-  s.onload = () => {
-    const size = window.innerWidth - 76;
-    new QRCode(document.getElementById("qr-box"), {
-      text: "REZERV:PYVOVAR:YURII:FEDOROVYCH:18062003:20270326",
-      width: size, height: size, colorDark: "#000", colorLight: "#fff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  };
-  document.head.appendChild(s);
-})();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
+function renderQrImage() {
+  document.getElementById("qr-box").innerHTML = `
+    <div class="qr-photo-wrap">
+      <div class="qr-photo-frame">
+        <img class="qr-photo" src="${QR_IMAGE_SRC}" alt="QR код">
+      </div>
+    </div>
+  `;
+}
+function setInstallVisible(visible) {
+  const topBtn = document.getElementById("installTopBtn");
+  const toast = document.getElementById("installToast");
+  topBtn.hidden = !visible;
+  toast.hidden = !visible;
+  if (visible) {
+    clearTimeout(installToastTimer);
+    requestAnimationFrame(() => toast.classList.add("show"));
+    installToastTimer = setTimeout(() => toast.classList.remove("show"), 8000);
+  } else {
+    toast.classList.remove("show");
+  }
+}
+async function triggerInstall() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice.catch(() => null);
+    deferredInstallPrompt = null;
+    setInstallVisible(false);
+    return;
+  }
+  const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  if (isiOS && !isStandalone) {
+    document.getElementById("installCopy").textContent = "На iPhone відкрийте меню Поділитися в Safari і виберіть «На початковий екран».";
+    setInstallVisible(true);
+  }
+}
+function initInstallPrompt() {
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    document.getElementById("installCopy").textContent = "Додайте Резерв+ на головний екран, щоб відкривати його як окремий застосунок і запускати офлайн.";
+    setInstallVisible(true);
+  });
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    setInstallVisible(false);
+  });
+  document.getElementById("installTopBtn").addEventListener("click", triggerInstall);
+  document.getElementById("installActionBtn").addEventListener("click", triggerInstall);
+  document.getElementById("installDismissBtn").addEventListener("click", () => setInstallVisible(false));
+}
+async function registerAppServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  try {
+    const registration = await navigator.serviceWorker.register("./sw.js");
+    if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
+  } catch (_) {}
+}
+renderQrImage();
+initInstallPrompt();
+registerAppServiceWorker();
 </script>
 </body>
 </html>
