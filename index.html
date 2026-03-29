@@ -5,7 +5,7 @@
   <meta name="description" content="PWA-версія застосунку Резерв+ з офлайн-запуском, встановленням на головний екран та кешуванням оболонки застосунку.">
   <meta name="format-detection" content="telephone=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Резерв+">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#e0dfcd">
@@ -54,7 +54,7 @@
     .screen::-webkit-scrollbar { display: none; }
     .screen.active { opacity: 1; pointer-events: all; }
     #s-rezerv { display: flex !important; flex-direction: column; overflow: hidden !important; padding: 0 16px !important; }
-    .topbar { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 0 8px; }
+    .topbar { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: calc(env(safe-area-inset-top, 0px) + 12px) 0 8px; }
     .topbar-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
     .pwa-pill { border: none; border-radius: 999px; background: rgba(26,26,26,.08); color: var(--text); padding: 10px 14px; font-size: 13px; font-weight: 400; cursor: pointer; white-space: nowrap; }
     .pwa-pill[hidden] { display: none !important; }
@@ -78,12 +78,12 @@
       from { transform: rotateY(180deg); }
       to { transform: rotateY(360deg); }
     }
-    .f-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 14px 4px; }
-    .f-title { font-size: 20px; font-weight: 500; letter-spacing: -.2px; }
+    .f-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 14px 4px; }
+    .f-title { font-size: 22px; font-weight: 500; letter-spacing: -.2px; }
     .trident-img { width: 36px; height: 40px; object-fit: contain; flex-shrink: 0; }
     .f-bday { padding: 10px 14px 8px; }
-    .f-bday-lbl { font-size: 15px; color: rgb(80,79,67); margin-bottom: 6px; font-weight: 500; }
-    .f-bday-val { font-size: 16px; font-weight: 400; color: #1a1a1a; }
+    .f-bday-lbl { font-size: 17px; color: rgb(80,79,67); margin-bottom: 6px; font-weight: 500; }
+    .f-bday-val { font-size: 18px; font-weight: 400; color: #1a1a1a; }
     .f-photo { margin: 0; height: calc(126px + 6.6vh); background: var(--card-bg); }
     .ticker-outer { background: var(--ticker); overflow: hidden; height: 22px; display: flex; align-items: center; }
     .ticker-track { display: inline-flex; width: max-content; flex-shrink: 0; will-change: transform; transform: translate3d(0,0,0); }
@@ -93,8 +93,8 @@
     .ticker-sep { display: inline-block; color: rgba(255,255,255,.82); font-size: 15px; font-weight: 500; padding: 0 14px; line-height: 1; }
     @keyframes belt { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .f-person { padding: 20px 14px 11px; position: relative; background: var(--card-bg); display: flex; flex-direction: column; justify-content: center; }
-    .f-plbl { font-size: 15px; color: rgb(80,79,67); margin-bottom: 10px; font-weight: 500; }
-    .f-name { font-size: 21px; font-weight: 500; line-height: 1.1; letter-spacing: 0.1px; }
+    .f-plbl { font-size: 17px; color: rgb(80,79,67); margin-bottom: 10px; font-weight: 500; }
+    .f-name { font-size: 23px; font-weight: 500; line-height: 1.1; letter-spacing: 0.1px; }
     .btn-plus { position: absolute; right: 14px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--orange); color: #000; cursor: pointer; display: grid; place-items: center; padding: 0; box-shadow: 0 3px 12px rgba(232,120,0,.45); transition: transform .09s; }
     .btn-plus-glyph { display: block; font-size: 33px; font-weight: 500; line-height: .8; transform: translateY(-1px); }
     .btn-plus:active { transform: scale(.92); }
@@ -139,6 +139,8 @@
     .mico { width: 22px; height: 22px; flex-shrink: 0; }
     .mico-img { object-fit: contain; display: block; }
     .mico-img-lg { width: 27px; height: 27px; }
+    .mico-img-xl { width: 44px; height: 44px; }
+    .mico-img-xxl { width: 54px; height: 54px; }
     .marr { margin-left: auto; opacity: .85; flex-shrink: 0; }
     .outbtn { display: block; width: auto; margin: 22px auto 14px; padding: 15px 40px; border-radius: 60px; border: none; background: #2d2a27; color: #fff; font-size: 17px; font-weight: 400; cursor: pointer; text-align: center; }
     .outbtn:active { opacity: .8; }
@@ -299,11 +301,11 @@
       <div class="stitle menu-title">Меню</div>
       <div class="mver">Версія 2.0.0</div>
       <div class="mgrp">
-        <div class="mrow"><img class="mico mico-img" src="./menu-icon-1.svg" alt="">Активні сесії<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
-        <div class="mrow"><img class="mico mico-img" src="./menu-icon-2.svg" alt="">Налаштування<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="mrow"><img class="mico mico-img mico-img-xl" src="./menu-icon-1.svg" alt="">Активні сесії<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="mrow"><img class="mico mico-img mico-img-xl" src="./menu-icon-2.svg" alt="">Налаштування<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
       </div>
       <div class="mgrp">
-        <div class="mrow"><img class="mico mico-img mico-img-lg" src="./menu-icon-3.svg" alt="">Питання та відповіді<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="mrow"><img class="mico mico-img mico-img-xxl" src="./menu-icon-3.svg" alt="">Питання та відповіді<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
         <div class="mrow"><img class="mico mico-img" src="./menu-icon-4.svg" alt="">Служба підтримки<svg class="marr" width="9" height="15" viewBox="0 0 9 15"><path d="M1 1l7 6.5L1 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
         <div class="mrow"><img class="mico mico-img" src="./menu-icon-5.svg" alt="">Копіювати номер пристрою</div>
       </div>
