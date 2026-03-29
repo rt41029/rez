@@ -1,4 +1,4 @@
-const VERSION = "v2";
+const VERSION = "v3";
 const SHELL_CACHE = `rezerv-shell-${VERSION}`;
 const RUNTIME_CACHE = `rezerv-runtime-${VERSION}`;
 const OFFLINE_URL = "./offline.html";
@@ -9,6 +9,17 @@ const APP_SHELL = [
   "./offline.html",
   "./evod-template.pdf",
   "./qr-photo.jpg",
+  "./splash-start.jpg",
+  "./menu-icon-1.svg",
+  "./menu-icon-2.svg",
+  "./menu-icon-3.svg",
+  "./menu-icon-4.svg",
+  "./menu-icon-5.svg",
+  "./menu-icon-6.svg",
+  "./plus-menu-icon-1.svg",
+  "./plus-menu-icon-2.svg",
+  "./plus-menu-icon-3.svg",
+  "./notif-bell.png",
   "./icon-192.png",
   "./icon-512.png",
   "./apple-touch-icon.png"
