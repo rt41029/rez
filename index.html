@@ -141,13 +141,13 @@
     .outbtn { display: block; width: auto; margin: 22px auto 14px; padding: 15px 40px; border-radius: 60px; border: none; background: #2d2a27; color: #fff; font-size: 17px; font-weight: 400; cursor: pointer; text-align: center; }
     .outbtn:active { opacity: .8; }
     .pvlink { display: block; text-align: center; font-size: 14px; text-decoration: underline; cursor: pointer; color: var(--text); font-weight: 350; margin-bottom: 24px; line-height: 1.2; }
-    #nav { flex-shrink: 0; height: calc(var(--nav-h) + env(safe-area-inset-bottom,0px)); padding-bottom: env(safe-area-inset-bottom,0px); background: #fff; border-top: 1px solid #d8d5cc; display: grid; grid-template-columns: repeat(4,1fr); }
-    .nb { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: none; background: transparent; cursor: pointer; font-size: 12px; font-weight: 400; color: rgba(26,26,26,.58); transition: color .14s; padding: 7px 4px 4px; }
-    .nb-svg { width: 35px; height: 35px; opacity: 1; transition: opacity .14s; display: flex; align-items: center; justify-content: center; color: var(--text); }
+    #nav { flex-shrink: 0; height: calc(62px + env(safe-area-inset-bottom,0px)); padding-bottom: env(safe-area-inset-bottom,0px); background: #fff; border-top: 1px solid #d8d5cc; display: grid; grid-template-columns: repeat(4,1fr); }
+    .nb { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border: none; background: transparent; cursor: pointer; font-size: 12px; font-weight: 400; color: rgba(26,26,26,.58); transition: color .14s; padding: 4px 4px 2px; }
+    .nb-svg { width: 39px; height: 39px; opacity: 1; transition: opacity .14s; display: flex; align-items: center; justify-content: center; color: var(--text); }
     .nb-svg svg { display: block; }
     .nb.active { color: var(--text); font-weight: 500; }
     .nb.active .nb-svg { opacity: 1; }
-    .nb-icon-wrap { position: relative; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; transform: none; }
+    .nb-icon-wrap { position: relative; width: 39px; height: 39px; display: flex; align-items: center; justify-content: center; transform: none; }
     .install-toast { position: fixed; left: 16px; right: 16px; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px); z-index: 850; padding: 16px; border-radius: 24px; background: rgba(26,26,26,.96); color: #fff; box-shadow: 0 14px 34px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transform: translateY(18px); transition: opacity .24s ease, transform .24s ease; }
     .install-toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
     .install-toast[hidden] { display: none !important; }
@@ -450,7 +450,6 @@ const QR_IMAGE_SRC = "./qr-photo.jpg";
 const PDF_TEMPLATE_URL = "./evod-template.pdf";
 let deferredInstallPrompt = null;
 let installToastTimer = null;
-let lastTickerText = "";
 let cardShowingBack = false;
 let tickerUsesCurrentKyivTime = false;
 const bootSplash = document.getElementById("bootSplash");
@@ -598,24 +597,17 @@ function getKyivTickerText() {
   const now = getKyivNowParts();
   return "Документ оновлено о " + now.hour + ":" + now.minute + " | " + now.day + "." + now.month + "." + now.year;
 }
-function makeTicker() {
+function fillTickerTrack(trackId, txt) {
+  const track = document.getElementById(trackId);
+  if (!track) return;
+  let h = "";
+  for (let i = 0; i < 8; i++) h += "<span>" + txt + "</span><span class=\"ticker-sep\"> • </span>";
+  track.innerHTML = h + h;
+}
+function syncAllTickers() {
   const txt = getKyivTickerText();
-  lastTickerText = txt;
-  let h = "";
-  for (let i = 0; i < 8; i++) h += "<span>" + txt + "</span><span class=\"ticker-sep\"> • </span>";
-  document.getElementById("tbelt").innerHTML = h + h;
-}
-function syncDocumentTicker() {
-  const txt = lastTickerText || getKyivTickerText();
-  let h = "";
-  for (let i = 0; i < 8; i++) h += "<span>" + txt + "</span><span class=\"ticker-sep\"> • </span>";
-  document.getElementById("docviewTickerTrack").innerHTML = h + h;
-}
-function ensureTickersVisible() {
-  const mainTicker = document.getElementById("tbelt");
-  const docTicker = document.getElementById("docviewTickerTrack");
-  if (mainTicker && !mainTicker.textContent.trim()) makeTicker();
-  if (docTicker && !docTicker.textContent.trim()) syncDocumentTicker();
+  fillTickerTrack("tbelt", txt);
+  fillTickerTrack("docviewTickerTrack", txt);
 }
 function mountDocumentTrident() {
   const source = document.querySelector(".trident-img");
@@ -627,19 +619,12 @@ function syncNoticeDate() {
   document.getElementById("noticeDateNow").textContent = now.day + "." + now.month + "." + now.year + " о " + now.hour + ":" + now.minute;
 }
 function refreshDynamicDates() {
-  makeTicker();
-  syncDocumentTicker();
+  syncAllTickers();
   syncNoticeDate();
 }
-makeTicker();
-syncDocumentTicker();
+syncAllTickers();
 syncNoticeDate();
 setInterval(refreshDynamicDates, 60000);
-setInterval(ensureTickersVisible, 2000);
-window.addEventListener("pageshow", ensureTickersVisible);
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) ensureTickersVisible();
-});
 mountDocumentTrident();
 function renderQrImage() {
   document.getElementById("qr-box").innerHTML = `
