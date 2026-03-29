@@ -21,7 +21,8 @@
       --ticker: #644c23; --orange: #e87800; --nav-h: 68px;
     }
     html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; font-weight: 300; color: var(--text); color-scheme: light; }
-    body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 10030; pointer-events: none; opacity: 0; transition: opacity .2s ease; }
+    body::before { content: ""; position: fixed; left: 0; right: 0; pointer-events: none; }
+    body::before { top: 0; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 10030; opacity: 0; transition: opacity .2s ease; }
     body.app-ready::before { opacity: 1; }
     #bootSplash { position: fixed; inset: 0; z-index: 10020; background: #24221e; display: flex; align-items: stretch; justify-content: stretch; transition: opacity .3s ease; }
     #bootSplash.hide { opacity: 0; pointer-events: none; }
