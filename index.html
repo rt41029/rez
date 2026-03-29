@@ -80,17 +80,17 @@
     .f-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 14px 4px; }
     .f-title { font-size: 20px; font-weight: 500; letter-spacing: -.2px; }
     .trident-img { width: 36px; height: 40px; object-fit: contain; flex-shrink: 0; }
-    .f-bday { padding: 0 14px 8px; }
-    .f-bday-lbl { font-size: 14px; color: rgb(80,79,67); margin-bottom: 6px; font-weight: 500; }
-    .f-bday-val { font-size: 17px; font-weight: 400; color: #1a1a1a; }
+    .f-bday { padding: 10px 14px 8px; }
+    .f-bday-lbl { font-size: 15px; color: rgb(80,79,67); margin-bottom: 6px; font-weight: 500; }
+    .f-bday-val { font-size: 16px; font-weight: 400; color: #1a1a1a; }
     .f-photo { margin: 0; height: calc(126px + 6.6vh); background: var(--card-bg); }
     .ticker-outer { background: var(--ticker); overflow: hidden; height: 22px; display: flex; align-items: center; }
-    .ticker-track { display: flex; white-space: nowrap; flex-shrink: 0; width: max-content; animation: belt 56s linear infinite; will-change: transform; }
+    .ticker-track { display: flex; white-space: nowrap; flex-shrink: 0; animation: belt 56s linear infinite; }
     .ticker-track span { display: inline-block; color: rgba(255,255,255,.98); font-size: 15px; font-weight: 300; line-height: 1; letter-spacing: -.2px; }
     .ticker-sep { display: inline-block; color: rgba(255,255,255,.82); font-size: 15px; font-weight: 300; padding: 0 14px; line-height: 1; }
     @keyframes belt { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .f-person { padding: 20px 14px 11px; position: relative; background: var(--card-bg); display: flex; flex-direction: column; justify-content: center; }
-    .f-plbl { font-size: 14px; color: rgb(80,79,67); margin-bottom: 10px; font-weight: 500; }
+    .f-plbl { font-size: 15px; color: rgb(80,79,67); margin-bottom: 10px; font-weight: 500; }
     .f-name { font-size: 21px; font-weight: 500; line-height: 1.1; letter-spacing: 0.1px; }
     .btn-plus { position: absolute; right: 14px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--orange); color: #000; cursor: pointer; display: grid; place-items: center; padding: 0; box-shadow: 0 3px 12px rgba(232,120,0,.45); transition: transform .09s; }
     .btn-plus-glyph { display: block; font-size: 33px; font-weight: 500; line-height: .8; transform: translateY(-1px); }
@@ -140,13 +140,13 @@
     .outbtn { display: block; width: auto; margin: 22px auto 14px; padding: 15px 40px; border-radius: 60px; border: none; background: #2d2a27; color: #fff; font-size: 17px; font-weight: 400; cursor: pointer; text-align: center; }
     .outbtn:active { opacity: .8; }
     .pvlink { display: block; text-align: center; font-size: 14px; text-decoration: underline; cursor: pointer; color: var(--text); font-weight: 350; margin-bottom: 24px; line-height: 1.2; }
-    #nav { flex-shrink: 0; height: calc(var(--nav-h) + env(safe-area-inset-bottom,0px)); padding-bottom: env(safe-area-inset-bottom,0px); background: #fff; border-top: 1px solid #e0ddd6; display: grid; grid-template-columns: repeat(4,1fr); }
-    .nb { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: none; background: transparent; cursor: pointer; font-size: 11px; font-weight: 400; color: rgba(26,26,26,.58); transition: color .14s; padding: 9px 4px 4px; }
-    .nb-svg { width: 29px; height: 29px; opacity: 1; transition: opacity .14s; display: flex; align-items: center; justify-content: center; color: var(--text); }
+    #nav { flex-shrink: 0; height: calc(var(--nav-h) + env(safe-area-inset-bottom,0px)); padding-bottom: env(safe-area-inset-bottom,0px); background: #fff; border-top: 1px solid #d8d5cc; display: grid; grid-template-columns: repeat(4,1fr); }
+    .nb { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; border: none; background: transparent; cursor: pointer; font-size: 12px; font-weight: 400; color: rgba(26,26,26,.58); transition: color .14s; padding: 9px 4px 4px; }
+    .nb-svg { width: 32px; height: 32px; opacity: 1; transition: opacity .14s; display: flex; align-items: center; justify-content: center; color: var(--text); }
     .nb-svg svg { display: block; }
     .nb.active { color: var(--text); font-weight: 500; }
     .nb.active .nb-svg { opacity: 1; }
-    .nb-icon-wrap { position: relative; width: 29px; height: 29px; display: flex; align-items: center; justify-content: center; transform: none; }
+    .nb-icon-wrap { position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transform: none; }
     .install-toast { position: fixed; left: 16px; right: 16px; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px); z-index: 850; padding: 16px; border-radius: 24px; background: rgba(26,26,26,.96); color: #fff; box-shadow: 0 14px 34px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transform: translateY(18px); transition: opacity .24s ease, transform .24s ease; }
     .install-toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
     .install-toast[hidden] { display: none !important; }
