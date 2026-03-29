@@ -1,4 +1,4 @@
-const VERSION = "v4";
+const VERSION = "v5";
 const SHELL_CACHE = `rezerv-shell-${VERSION}`;
 const RUNTIME_CACHE = `rezerv-runtime-${VERSION}`;
 const OFFLINE_URL = "./offline.html";
